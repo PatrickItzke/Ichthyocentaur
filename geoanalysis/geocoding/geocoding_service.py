@@ -2,7 +2,8 @@
 import json
 import time
 import pika
-import geocoder
+#from . import geocoder
+import geoanalysis.geocoding.geocoder as geocoder
 
 CONNECTION = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 CHANNEL = CONNECTION.channel()
