@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  title: "Geoanalysis API"
+  version: "1.0.0"
+  contact:
+    name: Patrick Itke    
+tags:
+  - name: Metadata
+    description: Metadata related requests
+servers:
+  - url: /v1.0
+paths:
+  /geoanalysis:
+    put:
+      operationId: api.geoanalysis.geoanalysis_put
+      summary: Puts address/location information for geoanalysis      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  address: 
+                    type: string
+                    description: Address information in a single line
+                  latitude: 
+                    type: number
+                    description: The latitude part of the coordinate
+                  longitude: 
+                    type: number
+                    description: The longitude part of the coordinate
+                  topics: 
+                    type: array
+                    description: The 
+                    items:
+                        type: string
+                        enum:
+                          - precipitation
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  processingid:
+                    type: string
+                    description: The id to retrieve your processing results
+                  eta:
+                    type: integer
+                    description: A rough number of seconds to process your request
+                
+  
+     
+        
