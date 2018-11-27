@@ -53,6 +53,82 @@ paths:
                   eta:
                     type: integer
                     description: A rough number of seconds to process your request
+  /geoanalysis/{processingid}:
+    get:
+      operationId: api.geoanalysis.geoanalysis_get
+      summary: Returns the analysis results after the processing is finished. Please check status first!
+      parameters:
+        - in: path
+          name: processingid
+          schema:
+            type: string
+          required: true
+          description: The id you received when requesting the geoanalysis
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    latitude:
+                      type: number
+                      description: The latitude part of the coordinate
+                    longitude: 
+                      type: number
+                      description: The longitude part of the coordinate
+                    topics: 
+                      type: array
+                      description: The topic values per location
+                      items:
+                          type: object
+                          properties:
+                            topic:
+                              type: string
+                              description: Name of analysis topic
+                            topic_value:
+                              type: number
+                              description: Value of analysis topic
+                       
+
+  /geoanalysis/queue/{processingid}:
+    get:
+      operationId: api.geoanalysis.geoanalysis_status
+      summary: Gets the processing status for given processing id
+      parameters:
+        - in: path
+          name: processingid
+          schema:
+            type: string
+          required: true
+          description: The id you received when requesting the geoanalysis
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  processingid:
+                    type: string
+                    description: Id of requested processing
+                  status:
+                    type: string
+                    description: Status of processing
+                  finishedlocations:
+                    type: integer
+                    description: Number of finished locations
+                  totallocations:
+                    type: integer
+                    description: Total number of locations
+        '404':
+          description: Not Found
+
+
                 
   
      
