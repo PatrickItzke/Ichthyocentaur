@@ -19,8 +19,7 @@ services:
 
   geocoding:
     build: ./geoanalysis/geocoding
-    ports:
-      - "5672"
+         
     depends_on:
        - "rabbitmq"
     restart: on-failure
@@ -28,8 +27,7 @@ services:
   
   analysis-dispatching:
     build: ./geoanalysis/analysis_dispatching
-    ports:
-      - "5672"
+          
     depends_on:
       - "rabbitmq"
     restart: on-failure
@@ -37,8 +35,7 @@ services:
   
   raster_analysis:
     build: ./geoanalysis/raster
-    ports:
-      - "5672"
+          
     depends_on:
       - "rabbitmq"
     restart: on-failure
@@ -46,9 +43,7 @@ services:
   
   result-caching:
     build: ./geoanalysis/caching
-    ports:
-      - "5672"
-      - "6379"
+    
     depends_on:
       - "rabbitmq"
       - "redis"
@@ -59,8 +54,7 @@ services:
     build: ./geoanalysis/http_gateway
     ports:
       - "8080:8080"
-      - "5672"
-      - "6379"
+      
     depends_on:
       - "rabbitmq"
       - "redis"
