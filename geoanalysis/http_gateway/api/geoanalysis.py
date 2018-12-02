@@ -9,7 +9,7 @@ import time
 
 
 redisStore = redis.Redis(
-    host='localhost',
+    host='ichthyocentaur_redis_1',
     port=6379)
 
 
@@ -27,7 +27,7 @@ class PutResponse(object):
 
 class QueuingService(object):
     def __init__(self):
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='ichthyocentaur_rabbitmq_1'))
         self.channel = channel = self.connection.channel()
         channel.queue_declare(queue='geocoding_task_queue', durable=False)
 
@@ -128,7 +128,7 @@ def geoanalysis_get(processingid):
                                                      'topic_value': entry_dict['topic_value']})
     
     response = []
-    for keys, coordinate_values in location_topic_values.items():
+    for coordinate_values in location_topic_values.values():
         response.append(coordinate_values)
 
     return response, 200

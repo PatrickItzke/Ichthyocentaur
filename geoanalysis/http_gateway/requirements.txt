@@ -1,0 +1,4 @@
+connexion[swagger-ui]
+flask
+pika
+redis

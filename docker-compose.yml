@@ -1,0 +1,70 @@
+version: "3"
+services:
+
+  rabbitmq:
+    image: rabbitmq:3.7.8-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+
+  redis:
+    image: redis:5.0.1-alpine
+    ports:
+      - "6379"
+
+  geocoding:
+    build: ./geoanalysis/geocoding
+    ports:
+      - "5672"
+    depends_on:
+       - "rabbitmq"
+    restart: on-failure
+    
+  
+  analysis-dispatching:
+    build: ./geoanalysis/analysis_dispatching
+    ports:
+      - "5672"
+    depends_on:
+      - "rabbitmq"
+    restart: on-failure
+    
+  
+  raster_analysis:
+    build: ./geoanalysis/raster
+    ports:
+      - "5672"
+    depends_on:
+      - "rabbitmq"
+    restart: on-failure
+    
+  
+  result-caching:
+    build: ./geoanalysis/caching
+    ports:
+      - "5672"
+      - "6379"
+    depends_on:
+      - "rabbitmq"
+      - "redis"
+    restart: on-failure
+    
+  
+  api:
+    build: ./geoanalysis/http_gateway
+    ports:
+      - "8080:8080"
+      - "5672"
+      - "6379"
+    depends_on:
+      - "rabbitmq"
+      - "redis"
+    restart: on-failure
+
+  
+    

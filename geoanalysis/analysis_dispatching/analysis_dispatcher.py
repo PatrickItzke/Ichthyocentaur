@@ -4,7 +4,7 @@ import time
 import pika
 
 
-CONNECTION = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+CONNECTION = pika.BlockingConnection(pika.ConnectionParameters('ichthyocentaur_rabbitmq_1'))
 CHANNEL = CONNECTION.channel()
 
 CHANNEL.queue_declare(queue='analysis_task_queue', durable=False)
@@ -24,6 +24,9 @@ def callback(ch, method, properties, body):
     
     for topic in body['topics']:
        CHANNEL.basic_publish('', queues[topic], json.dumps(body))
+
+    #confirm delivery of this message back to origin
+    CHANNEL.basic_ack(delivery_tag=method.delivery_tag)
 
     print(" [x] Topic dispatching: %r" % json.dumps(body))   
     print(" [x] Done")
