@@ -18,32 +18,34 @@ services:
       - "6379"
 
   geocoding:
-    build: ./geoanalysis/geocoding
-         
+    build: ./geoanalysis/geocoding         
     depends_on:
        - "rabbitmq"
+    deploy:
+      replicas: 3
     restart: on-failure
     
   
   analysis-dispatching:
-    build: ./geoanalysis/analysis_dispatching
-          
+    build: ./geoanalysis/analysis_dispatching          
     depends_on:
       - "rabbitmq"
     restart: on-failure
     
   
   raster_analysis:
-    build: ./geoanalysis/raster
-          
+    build: ./geoanalysis/raster          
     depends_on:
       - "rabbitmq"
+    volumes: 
+      - rasterdata:/var/rasterdata
+    deploy:
+      replicas: 3
     restart: on-failure
     
   
   result-caching:
-    build: ./geoanalysis/caching
-    
+    build: ./geoanalysis/caching    
     depends_on:
       - "rabbitmq"
       - "redis"
@@ -53,12 +55,15 @@ services:
   api:
     build: ./geoanalysis/http_gateway
     ports:
-      - "8080:8080"
-      
+      - "8080:8080"      
     depends_on:
       - "rabbitmq"
       - "redis"
     restart: on-failure
+
+volumes: 
+  rasterdata:
+    external: true
 
   
     

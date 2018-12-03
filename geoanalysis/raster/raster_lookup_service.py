@@ -15,7 +15,7 @@ CHANNEL.queue_declare(queue='geoanalysis_result_queue', durable=False)
 def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
     body: dict = json.loads(body)
-    with rasterio.open('TRMM_3B43M_2016-08-01_rgb_1440x720.TIFF') as src:
+    with rasterio.open('/var/rasterdata/TRMM_3B43M_2016-08-01_rgb_1440x720.TIFF') as src:
             
             reader = raster_lookup.RasterValueReader(src, windowed_read=True)
             value = reader.getCoordinateBandValue(body['latitude'], body['longitude'], 1)            
